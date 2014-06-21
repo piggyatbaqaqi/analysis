@@ -14,3 +14,14 @@ that there is a subdirectory of the current working directory called
 This was produced by La Monte Henry Piggy Yarroll
 <piggy.yarroll+coursera@gmail.com> in fulfillment of the Project for
 the Coursera/Johns Hopkins Getting and Clearning Data course.
+
+The dataset includes the following files:
+=========================================
+- README.md
+
+- codebook.md: Gives a description of the variables in the dataset.
+
+- UCI_HAR_tidy.txt: A csv table with header with the summary data.
+
+- run_analysis.R: The script used to generate the tidy dataset from
+  the original UCI HAR Dataset.

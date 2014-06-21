@@ -27,17 +27,27 @@ test.X        <- read.table("UCI HAR Dataset/test/X_test.txt",
 # Merge the training and the test sets to create one data set.
 ucihar.raw <- rbind(train.X, test.X)
 
-# Extract only the measurements on the mean and standard deviation for each measurement. 
-ucihar <- ucihar.raw[, grep("[a-zA-Z]+\\.(std|mean)\\.", names(ucihar.raw))]
+# Extract only the measurements on the mean and standard deviation
+# for each measurement. 
+columns <- grep("[a-zA-Z]+\\.(std|mean)\\.", names(ucihar.raw))
+ucihar.subset <- ucihar.raw[, columns]
+
+# Pick up the experimental subjects.
+ucihar.subset$subject <- rbind(train.subject, test.subject)$subject
 
 # Use descriptive activity names to name the activities in the data set.
-activity.by.code <- rbind(train.y, test.y)
-activity.by.name <- merge(activity.labels, activity.by.code, by="activity.code")
-ucihar$activity <- activity.by.name$activity
-
-ucihar$subject <- rbind(train.subject, test.subject)
+ucihar.subset$activity.code <- rbind(train.y, test.y)$activity.code
+ucihar <- merge(activity.labels, ucihar, by="activity.code", all=TRUE)
 
 # Appropriately label the data set with descriptive variable names. 
+new.names <- names(ucihar)
+new.names <- gsub("^t", "time", new.names)
+new.names <- gsub("^f", "frequency", new.names)
+new.names <- gsub("Acc", "Acceleration", new.names)
+new.names <- gsub("Gyro", "Gyroscope", new.names)
+new.names <- gsub("Mag", "Magnitude", new.names)
+new.names <- gsub("\\.\\.", "", new.names)
+names(ucihar) <- new.names
 
-# Create a second, independent tidy data set with the average of each variable for
-# each activity and each subject. 
+# Create a second, independent tidy data set with the average of each
+# variable for each activity and each subject.
